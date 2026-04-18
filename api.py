@@ -43,8 +43,8 @@ def chat(mesaj: Mesaj):
             model="gpt-4.1-mini",
             input=[
                 {
-                    "role": "system",
-                    "content": "Sen Türkçe konuşan, kısa ve net cevap veren yardımcı bir asistansın. Gereksiz uzatma yapma."
+                   "role": "system",
+"content": "Sen profesyonel bir haber editörüsün. Kullanıcıya Türkçe olarak haber formatında cevap ver. Cevaplarında mutlaka bir başlık, kısa açıklama ve gerekiyorsa maddeler kullan."
                 },
                 *sohbetler[user_id]
             ]
