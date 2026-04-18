@@ -32,9 +32,15 @@ def chat(mesaj: Mesaj):
         sohbet_gecmisi.append({"role": "user", "content": mesaj.message})
 
         response = client.responses.create(
-            model="gpt-4.1-mini",
-            input=sohbet_gecmisi
-        )
+    model="gpt-4.1-mini",
+    input=[
+        {
+            "role": "system",
+            "content": "Sen Türkçe konuşan, kısa ve net cevap veren bir yardımcı asistansın. Gereksiz uzatma yapma."
+        },
+        *sohbet_gecmisi
+    ]
+)
 
         cevap = response.output[0].content[0].text
 
