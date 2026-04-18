@@ -37,12 +37,12 @@ def chat(mesaj: Mesaj, x_api_key: str = Header(None)):
 
     istek_sayaci[x_api_key] += 1
 
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=mesaj.message
-    )
+response = client.responses.create(
+    model="gpt-4.1-mini",
+    input=mesaj.message
+)
 
-    return {
+return {
     "cevap": response.output[0].content[0].text,
-    "kalan_hak": MAKSIMUM_ISTEK - istek_sayaci[x_api_key]
-    }
+    "kalan_hak": MAKSIMUM_ISTEK - istek_sayaci.get(x_api_key, 0)
+}
