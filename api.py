@@ -3,7 +3,19 @@ from pydantic import BaseModel
 from openai import OpenAI
 import os
 
+# 🔥 CORS EKLENDİ
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+# 🔥 CORS AYARI (BUNU EKLEMEZSEN FRONTEND ÇALIŞMAZ)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # tüm sitelere izin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -19,7 +31,7 @@ def chat(mesaj: Mesaj):
             input=mesaj.message
         )
 
-        # SAFE extraction
+        # güvenli okuma
         if response.output and len(response.output) > 0:
             cevap = response.output[0].content[0].text
         else:
@@ -28,6 +40,4 @@ def chat(mesaj: Mesaj):
         return {"cevap": cevap}
 
     except Exception as e:
-        return {
-            "hata": str(e)
-        }
+        return {"hata": str(e)}
