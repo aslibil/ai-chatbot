@@ -86,6 +86,11 @@ function addMessage(text, type) {
     div.classList.add("msg", type);
     div.innerText = text;
     document.getElementById("chat").appendChild(div);
+
+    // 👇 mesajı kaydet
+    let messages = JSON.parse(localStorage.getItem("chat")) || [];
+    messages.push({ text, type });
+    localStorage.setItem("chat", JSON.stringify(messages));
 }
 
 async function send() {
