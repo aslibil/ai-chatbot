@@ -43,6 +43,6 @@ def chat(mesaj: Mesaj, x_api_key: str = Header(None)):
     )
 
     return {
-        "cevap": response.output_text,
-        "kalan_hak": MAKSIMUM_ISTEK - istek_sayaci[x_api_key]
+    "cevap": response.output[0].content[0].text,
+    "kalan_hak": MAKSIMUM_ISTEK - istek_sayaci[x_api_key]
     }
