@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+sohbet_gecmisi = []
+
 # 🔥 CORS AYARI (BUNU EKLEMEZSEN FRONTEND ÇALIŞMAZ)
 app.add_middleware(
     CORSMiddleware,
@@ -26,16 +28,18 @@ class Mesaj(BaseModel):
 def chat(mesaj: Mesaj):
 
     try:
+        # kullanıcı mesajını ekle
+        sohbet_gecmisi.append({"role": "user", "content": mesaj.message})
+
         response = client.responses.create(
             model="gpt-4.1-mini",
-            input=mesaj.message
+            input=sohbet_gecmisi
         )
 
-        # güvenli okuma
-        if response.output and len(response.output) > 0:
-            cevap = response.output[0].content[0].text
-        else:
-            cevap = "Boş cevap geldi"
+        cevap = response.output[0].content[0].text
+
+        # bot cevabını da ekle
+        sohbet_gecmisi.append({"role": "assistant", "content": cevap})
 
         return {"cevap": cevap}
 
