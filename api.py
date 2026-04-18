@@ -2,18 +2,17 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from openai import OpenAI
 import os
-
-# 🔥 CORS EKLENDİ
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-sohbet_gecmisi = []
+# hafıza
+sohbetler = {}
 
-# 🔥 CORS AYARI (BUNU EKLEMEZSEN FRONTEND ÇALIŞMAZ)
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tüm sitelere izin
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,24 +27,36 @@ class Mesaj(BaseModel):
 def chat(mesaj: Mesaj):
 
     try:
-        # kullanıcı mesajını ekle
-        sohbet_gecmisi.append({"role": "user", "content": mesaj.message})
+        user_id = "default_user"
+
+        # kullanıcı hafızası yoksa oluştur
+        if user_id not in sohbetler:
+            sohbetler[user_id] = []
+
+        # kullanıcı mesajı ekle
+        sohbetler[user_id].append({
+            "role": "user",
+            "content": mesaj.message
+        })
 
         response = client.responses.create(
-    model="gpt-4.1-mini",
-    input=[
-        {
-            "role": "system",
-            "content": "Sen Türkçe konuşan, kısa ve net cevap veren bir yardımcı asistansın. Gereksiz uzatma yapma."
-        },
-        *sohbet_gecmisi
-    ]
-)
+            model="gpt-4.1-mini",
+            input=[
+                {
+                    "role": "system",
+                    "content": "Sen Türkçe konuşan, kısa ve net cevap veren yardımcı bir asistansın. Gereksiz uzatma yapma."
+                },
+                *sohbetler[user_id]
+            ]
+        )
 
         cevap = response.output[0].content[0].text
 
-        # bot cevabını da ekle
-        sohbet_gecmisi.append({"role": "assistant", "content": cevap})
+        # bot cevabı ekle
+        sohbetler[user_id].append({
+            "role": "assistant",
+            "content": cevap
+        })
 
         return {"cevap": cevap}
 
