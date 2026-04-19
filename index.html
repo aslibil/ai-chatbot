@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Haber</title>
+<title>AI Son Dakika Haberleri | Yapay Zeka Haber</title>
+
+<meta name="description" content="Yapay zeka ile üretilen son dakika, teknoloji, spor ve ekonomi haberleri. Hızlı ve güncel.">
 
 <style>
 body {
@@ -38,7 +40,7 @@ header {
     background:#c00;
 }
 
-/* MANSET */
+/* MANŞET */
 .headline {
     background:white;
     margin:15px;
@@ -103,7 +105,7 @@ button.send {
 </div>
 
 <div class="headline" id="headline">
-Manşet haber burada görünecek
+Yükleniyor...
 </div>
 
 <div class="news" id="news"></div>
@@ -116,11 +118,13 @@ Manşet haber burada görünecek
 <script>
 const API_URL = "https://ai-chatbot-api-bj93.onrender.com/chat";
 
+/* saat */
 function getTime(){
     const d = new Date();
     return d.getHours() + ":" + String(d.getMinutes()).padStart(2,'0');
 }
 
+/* haber ekle */
 function addNews(text){
     const div = document.createElement("div");
     div.className="news-item";
@@ -128,11 +132,17 @@ function addNews(text){
     document.getElementById("news").prepend(div);
 }
 
+/* manşet */
 function setHeadline(text){
     document.getElementById("headline").innerText = text;
 }
 
+/* API çağrısı */
 async function getNews(query){
+
+    // 🔥 URL paylaşılabilir hale gelir
+    window.history.pushState({}, "", "?q=" + encodeURIComponent(query));
+
     const res = await fetch(API_URL,{
         method:"POST",
         headers:{ "Content-Type":"application/json"},
@@ -145,6 +155,7 @@ async function getNews(query){
     addNews(data.cevap);
 }
 
+/* inputtan gönder */
 async function send(){
     const input = document.getElementById("input");
     const text = input.value;
@@ -163,6 +174,21 @@ async function send(){
     setHeadline(data.cevap);
     addNews(data.cevap);
 }
+
+/* sayfa açılınca */
+window.onload = function () {
+
+    // 🔥 URL’den query çek
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+
+    if(q){
+        getNews(q);
+    } else {
+        // 🔥 otomatik haber
+        getNews("son dakika haberleri");
+    }
+};
 </script>
 
 </body>
