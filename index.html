@@ -3,10 +3,10 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>AI Son Dakika Haberleri</title>
-<meta name="description" content="Yapay zeka ile üretilen son dakika haberleri, teknoloji, spor ve ekonomi gündemi.">
+<title>PrimeHaber | Yapay Zeka Son Dakika Haberleri</title>
 
-<!-- 🔥 Google AdSense -->
+<meta name="description" content="PrimeHaber - Yapay zeka ile üretilen son dakika, teknoloji, spor ve ekonomi haberleri. Hızlı ve güncel haber akışı.">
+
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
 <style>
@@ -16,20 +16,21 @@ body {
     background:#f5f5f5;
 }
 
+/* HEADER */
 header {
-    background:#c00;
+    background:#111;
     color:white;
     padding:15px;
     font-size:22px;
     text-align:center;
 }
 
+/* MENU */
 .menu {
     background:#222;
     display:flex;
     overflow-x:auto;
 }
-
 .menu button {
     flex:1;
     padding:12px;
@@ -38,22 +39,21 @@ header {
     color:white;
     cursor:pointer;
 }
-
 .menu button:hover {
     background:#c00;
 }
 
-/* 🔥 REKLAM ALANI */
+/* REKLAM */
 .ad-box {
     margin:15px;
     background:white;
     padding:15px;
     text-align:center;
     border-radius:10px;
-    font-size:14px;
     color:gray;
 }
 
+/* MANŞET */
 .headline {
     background:white;
     margin:15px;
@@ -63,6 +63,7 @@ header {
     font-size:18px;
 }
 
+/* HABER LİSTESİ */
 .news {
     margin:15px;
 }
@@ -81,6 +82,7 @@ header {
     color:gray;
 }
 
+/* INPUT */
 .input-box {
     position:fixed;
     bottom:0;
@@ -105,19 +107,19 @@ button.send {
 
 <body>
 
-<header>📰 AI SON DAKİKA HABERLERİ</header>
+<header>📰 PrimeHaber | Gerçek Zamanlı Haber Akışı</header>
 
 <div class="menu">
-    <button onclick="getNews('son dakika')">Son Dakika</button>
+    <button onclick="getNews('son dakika haberleri')">Son Dakika</button>
     <button onclick="getNews('güncel haberler')">Güncel</button>
     <button onclick="getNews('dünya haberleri')">Dünya</button>
     <button onclick="getNews('ekonomi haberleri')">Ekonomi</button>
     <button onclick="getNews('spor haberleri')">Spor</button>
 </div>
 
-<!-- 🔥 REKLAM -->
+<!-- REKLAM ALANI -->
 <div class="ad-box">
-    Reklam Alanı (AdSense buraya gelecek)
+    Reklam Alanı (AdSense burada görünecek)
 </div>
 
 <div class="headline" id="headline">Yükleniyor...</div>
