@@ -225,15 +225,9 @@ setInterval(async () => {
 
 /* sayfa açılış */
 window.onload = function () {
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get("q");
-
-    if(q){
-        getNews(q);
-    } else {
+   
         getNews("dünya haberleri");
-    }
-};
+    };
 
 </script>
 
