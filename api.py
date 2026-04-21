@@ -36,7 +36,9 @@ def chat(mesaj: Mesaj):
     }
 
 # 🔥 NEWS endpoint (haber üretici)
-prompt = f"""
+@app.post("/news")
+def news(mesaj: Mesaj):
+    prompt = f"""
 Sen profesyonel bir haber editörüsün.
 
 Aşağıdaki kurallara göre haber yaz:
