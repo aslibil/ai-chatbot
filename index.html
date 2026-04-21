@@ -6,119 +6,151 @@
 <meta name="robots" content="index, follow">
 <meta name="description" content="PrimeHaber - Son dakika haberleri, ekonomi, spor ve dünya haberleri.">
 
-<title>PrimeHaber | Yapay Zeka Son Dakika Haberleri</title>
+<title>PrimeHaber | Son Dakika Haberleri</title>
 
 <style>
-body {
+
+body{
     margin:0;
     font-family: Arial;
-    background:#f5f5f5;
+    background:#f4f4f4;
 }
 
-header {
-    background:#111;
+/* TOP BAR */
+header{
+    background:#0f0f0f;
     color:white;
-    padding:15px;
+    padding:18px;
     font-size:22px;
-    text-align:center;
+    font-weight:bold;
 }
 
-.menu {
-    background:#222;
+/* NAVBAR */
+.menu{
+    background:#1c1c1c;
     display:flex;
     overflow-x:auto;
 }
 
-.menu button {
+.menu button{
     flex:1;
     padding:12px;
     border:none;
-    background:#222;
+    background:transparent;
     color:white;
     cursor:pointer;
+    transition:0.2s;
 }
 
-.menu button:hover {
+.menu button:hover{
     background:#c00;
 }
 
-.ad-box {
+/* MANŞET */
+.headline{
     margin:15px;
+    padding:18px;
     background:white;
+    border-radius:12px;
+    font-size:20px;
+    font-weight:bold;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* AD */
+.ad-box{
+    margin:15px;
     padding:15px;
-    text-align:center;
+    background:white;
     border-radius:10px;
+    text-align:center;
     color:gray;
 }
 
-.headline {
-    background:white;
-    margin:15px;
+/* NEWS LIST */
+.news{
     padding:15px;
-    border-radius:10px;
-    font-weight:bold;
-    font-size:18px;
 }
 
-.news {
-    margin:15px;
-}
-
-.news-item {
+.news-item{
     background:white;
-    margin-bottom:10px;
-    padding:10px;
-    border-radius:8px;
+    padding:15px;
+    margin-bottom:12px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
     display:flex;
     justify-content:space-between;
-    font-size:14px;
+    gap:10px;
 }
 
-.time {
+.news-item b{
+    font-size:16px;
+}
+
+.news-item small{
+    color:#444;
+}
+
+/* TIME */
+.time{
+    font-size:12px;
     color:gray;
+    white-space:nowrap;
 }
 
-.input-box {
+/* INPUT */
+.input-box{
     position:fixed;
     bottom:0;
     width:100%;
     display:flex;
+    background:white;
+    box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 }
 
-input {
+input{
     flex:1;
-    padding:12px;
+    padding:14px;
     border:none;
+    outline:none;
 }
 
-button.send {
-    padding:12px;
+button.send{
+    padding:14px 20px;
     border:none;
     background:#c00;
     color:white;
+    font-weight:bold;
 }
+
+h1{
+    margin:15px;
+    font-size:18px;
+    color:#333;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<header>📰 PrimeHaber | Yapay Zeka Haber Akışı</header>
+<header>📰 PrimeHaber</header>
 
-<h1>Son Dakika Haberleri - PrimeHaber</h1>
+<h1>Son Dakika Haberleri</h1>
 
 <div class="menu">
     <button onclick="getNews('son dakika ekonomi')">Ekonomi</button>
     <button onclick="getNews('spor haberleri')">Spor</button>
     <button onclick="getNews('teknoloji haberleri')">Teknoloji</button>
-    <button onclick="getNews('dünya haberleri')">Dünya</button>
-</div>
-
-<div class="ad-box">
-    Reklam Alanı (AdSense burada)
+    button onclick="getNews('dünya haberleri')">Dünya</button>
 </div>
 
 <div class="headline" id="headline">Yükleniyor...</div>
+
+<div class="ad-box">
+    Reklam Alanı (AdSense)
+</div>
 
 <div class="news" id="news"></div>
 
@@ -137,11 +169,11 @@ function time(){
     return d.getHours()+":"+String(d.getMinutes()).padStart(2,'0');
 }
 
-/* haber ekle */
+/* HABER EKLE */
 function addNews(text){
 
     const parts = text.split("HABER:");
-    const title = parts[0].replace("BAŞLIK:", "").trim();
+    const title = parts[0].replace("BAŞLIK:","").trim();
     const content = parts[1] || "";
 
     const div = document.createElement("div");
@@ -152,21 +184,19 @@ function addNews(text){
             <b>${title}</b><br>
             <small>${content}</small>
         </div>
-        <span class='time'>${time()}</span>
+        <span class="time">${time()}</span>
     `;
 
     document.getElementById("news").prepend(div);
 }
 
-/* manşet */
+/* MANŞET */
 function setHeadline(text){
     document.getElementById("headline").innerText = text;
 }
 
-/* CHAT / HABER API */
+/* API */
 async function getNews(query){
-
-    window.history.pushState({}, "", "?q="+encodeURIComponent(query));
 
     const res = await fetch(API_URL,{
         method:"POST",
@@ -181,6 +211,7 @@ async function getNews(query){
 }
 
 async function send(){
+
     const input = document.getElementById("input");
     const text = input.value;
     if(!text) return;
@@ -199,7 +230,7 @@ async function send(){
     addNews(data.cevap);
 }
 
-/* 🔥 OTOMATİK HABER AKIŞI */
+/* OTOMATİK HABER */
 setInterval(async () => {
 
     const cats = [
@@ -223,16 +254,9 @@ setInterval(async () => {
 
 }, 15000);
 
-/* sayfa açılış */
-window.onload = function () {
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get("q");
-
-    if(q){
-        getNews(q);
-    } else {
-        getNews("son dakika haberleri");
-    }
+/* başlangıç */
+window.onload = function(){
+    getNews("son dakika haberleri");
 };
 
 </script>
