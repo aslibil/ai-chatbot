@@ -4,6 +4,8 @@ from openai import OpenAI
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+
+# .env yükle
 load_dotenv()
 
 app = FastAPI()
@@ -17,54 +19,66 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# request modeli
 class Mesaj(BaseModel):
     message: str
 
-# 🔹 CHAT endpoint (chat bot)
-@app.post("/chat")
-def chat(mesaj: Mesaj):
+# güvenli text alma
+def get_text(response):
+    try:
+        return response.output[0].content[0].text
+    except:
+        return "Haber alınamadı"
 
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=mesaj.message
-    )
-
-    return {
-        "cevap": response.output[0].content[0].text
-    }
-
-# 🔥 NEWS endpoint (haber üretici)
+# 🔥 NEWS endpoint
 @app.post("/news")
 def news(mesaj: Mesaj):
+
     prompt = f"""
 Sen profesyonel bir haber editörüsün.
 
-Aşağıdaki kurallara göre haber yaz:
+Aşağıdaki kurallara kesinlikle uy:
 
-- Başlık: dikkat çekici ve SEO uyumlu olsun
-- Giriş: kısa ve çarpıcı
-- Detay: 2-3 paragraf
-- Tarafsız ve gerçekçi yaz
 - Türkçe yaz
+- Kısa ve net yaz
+- Abartı yapma
+- Gerçekçi yaz
+
+FORMAT:
+
+TITLE: kısa ve dikkat çekici başlık
+
+CONTENT: 2-3 cümlelik haber özeti
 
 Konu: {mesaj.message}
-
-Format:
-
-BAŞLIK:
-...
-
-HABER:
-...
 """
 
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=prompt
-    )
+    try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=prompt
+        )
+        text = get_text(response)
+    except Exception as e:
+        text = "Şu anda haber alınamıyor"
 
-    return {
-        "haber": response.output[0].content[0].text
-    }
+    return {"haber": text}
+
+
+# 🔹 CHAT endpoint (opsiyonel)
+@app.post("/chat")
+def chat(mesaj: Mesaj):
+
+    try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=mesaj.message
+        )
+        text = get_text(response)
+    except:
+        text = "Cevap alınamadı"
+
+    return {"cevap": text}
