@@ -231,7 +231,7 @@ async function send(){
 }
 
 /* OTOMATİK HABER */
-setInterval(async () => {
+async function loadAutoNews(){
 
     const cats = [
         "son dakika ekonomi",
@@ -240,23 +240,33 @@ setInterval(async () => {
         "dünya haberleri"
     ];
 
-    const random = cats[Math.floor(Math.random()*cats.length)];
+    for(let i=0; i<3; i++){
 
-    const res = await fetch(API_URL,{
-        method:"POST",
-        headers:{ "Content-Type":"application/json"},
-        body: JSON.stringify({message:random})
-    });
+        const random = cats[Math.floor(Math.random()*cats.length)];
 
-    const data = await res.json();
+        const res = await fetch(API_URL,{
+            method:"POST",
+            headers:{ "Content-Type":"application/json"},
+            body: JSON.stringify({message:random})
+        });
 
-    addNews(data.cevap);
+        const data = await res.json();
 
-}, 15000);
+        addNews(data.cevap);
+    }
+}
 
 /* başlangıç */
-window.onload = function(){
-    getNews("son dakika haberleri");
+window.onload = function () {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+
+    if(q){
+        getNews(q);
+    } else {
+        loadAutoNews();
+        getNews("son dakika haberleri");
+    }
 };
 
 </script>
