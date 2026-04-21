@@ -105,6 +105,8 @@ button.send {
 
 <header>📰 PrimeHaber | Yapay Zeka Haber Akışı</header>
 
+<h1>Son Dakika Haberleri - PrimeHaber</h1>
+
 <div class="menu">
     <button onclick="getNews('son dakika ekonomi')">Ekonomi</button>
     <button onclick="getNews('spor haberleri')">Spor</button>
@@ -137,9 +139,22 @@ function time(){
 
 /* haber ekle */
 function addNews(text){
+
+    const parts = text.split("HABER:");
+    const title = parts[0].replace("BAŞLIK:", "").trim();
+    const content = parts[1] || "";
+
     const div = document.createElement("div");
     div.className="news-item";
-    div.innerHTML = "<span>"+text+"</span><span class='time'>"+time()+"</span>";
+
+    div.innerHTML = `
+        <div>
+            <b>${title}</b><br>
+            <small>${content}</small>
+        </div>
+        <span class='time'>${time()}</span>
+    `;
+
     document.getElementById("news").prepend(div);
 }
 

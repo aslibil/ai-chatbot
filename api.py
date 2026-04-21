@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from openai import OpenAI
 import os
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 
@@ -34,15 +36,27 @@ def chat(mesaj: Mesaj):
     }
 
 # 🔥 NEWS endpoint (haber üretici)
-@app.post("/news")
-def news(mesaj: Mesaj):
+prompt = f"""
+Sen profesyonel bir haber editörüsün.
 
-    prompt = f"""
-    Sen bir haber editörüsün.
-    Kısa, gerçekçi, son dakika haber formatında yaz.
+Aşağıdaki kurallara göre haber yaz:
 
-    Konu: {mesaj.message}
-    """
+- Başlık: dikkat çekici ve SEO uyumlu olsun
+- Giriş: kısa ve çarpıcı
+- Detay: 2-3 paragraf
+- Tarafsız ve gerçekçi yaz
+- Türkçe yaz
+
+Konu: {mesaj.message}
+
+Format:
+
+BAŞLIK:
+...
+
+HABER:
+...
+"""
 
     response = client.responses.create(
         model="gpt-4.1-mini",
