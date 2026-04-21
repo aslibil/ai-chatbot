@@ -8,8 +8,6 @@
 
 <title>PrimeHaber | Yapay Zeka Son Dakika Haberleri</title>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
 <style>
 body {
     margin:0;
@@ -105,18 +103,17 @@ button.send {
 
 <body>
 
-<header>📰 PrimeHaber | Gerçek Zamanlı Haber Akışı</header>
+<header>📰 PrimeHaber | Yapay Zeka Haber Akışı</header>
 
 <div class="menu">
-    <button onclick="getNews('son dakika haberleri')">Son Dakika</button>
-    <button onclick="getNews('güncel haberler')">Güncel</button>
-    <button onclick="getNews('dünya haberleri')">Dünya</button>
-    <button onclick="getNews('ekonomi haberleri')">Ekonomi</button>
+    <button onclick="getNews('son dakika ekonomi')">Ekonomi</button>
     <button onclick="getNews('spor haberleri')">Spor</button>
+    <button onclick="getNews('teknoloji haberleri')">Teknoloji</button>
+    <button onclick="getNews('dünya haberleri')">Dünya</button>
 </div>
 
 <div class="ad-box">
-    Reklam Alanı (AdSense burada görünecek)
+    Reklam Alanı (AdSense burada)
 </div>
 
 <div class="headline" id="headline">Yükleniyor...</div>
@@ -151,7 +148,7 @@ function setHeadline(text){
     document.getElementById("headline").innerText = text;
 }
 
-/* API */
+/* CHAT / HABER API */
 async function getNews(query){
 
     window.history.pushState({}, "", "?q="+encodeURIComponent(query));
@@ -186,6 +183,30 @@ async function send(){
     setHeadline(data.cevap);
     addNews(data.cevap);
 }
+
+/* 🔥 OTOMATİK HABER AKIŞI */
+setInterval(async () => {
+
+    const cats = [
+        "son dakika ekonomi",
+        "spor haberleri",
+        "teknoloji gelişmeleri",
+        "dünya haberleri"
+    ];
+
+    const random = cats[Math.floor(Math.random()*cats.length)];
+
+    const res = await fetch(API_URL,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json"},
+        body: JSON.stringify({message:random})
+    });
+
+    const data = await res.json();
+
+    addNews(data.cevap);
+
+}, 15000);
 
 /* sayfa açılış */
 window.onload = function () {

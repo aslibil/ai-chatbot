@@ -6,10 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# hafıza
-sohbetler = {}
-
-# CORS
+# CORS (frontend bağlanabilsin diye)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,42 +20,35 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 class Mesaj(BaseModel):
     message: str
 
+# 🔹 CHAT endpoint (chat bot)
 @app.post("/chat")
 def chat(mesaj: Mesaj):
 
-    try:
-        user_id = "default_user"
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=mesaj.message
+    )
 
-        # kullanıcı hafızası yoksa oluştur
-        if user_id not in sohbetler:
-            sohbetler[user_id] = []
+    return {
+        "cevap": response.output[0].content[0].text
+    }
 
-        # kullanıcı mesajı ekle
-        sohbetler[user_id].append({
-            "role": "user",
-            "content": mesaj.message
-        })
+# 🔥 NEWS endpoint (haber üretici)
+@app.post("/news")
+def news(mesaj: Mesaj):
 
-        response = client.responses.create(
-            model="gpt-4.1-mini",
-            input=[
-                {
-                   "role": "system",
-"content": "Sen profesyonel bir haber editörüsün. Kullanıcıya Türkçe olarak haber formatında cevap ver. Cevaplarında mutlaka bir başlık, kısa açıklama ve gerekiyorsa maddeler kullan."
-                },
-                *sohbetler[user_id]
-            ]
-        )
+    prompt = f"""
+    Sen bir haber editörüsün.
+    Kısa, gerçekçi, son dakika haber formatında yaz.
 
-        cevap = response.output[0].content[0].text
+    Konu: {mesaj.message}
+    """
 
-        # bot cevabı ekle
-        sohbetler[user_id].append({
-            "role": "assistant",
-            "content": cevap
-        })
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=prompt
+    )
 
-        return {"cevap": cevap}
-
-    except Exception as e:
-        return {"hata": str(e)}
+    return {
+        "haber": response.output[0].content[0].text
+    }
