@@ -66,14 +66,28 @@ def real_news():
     for entry in feed.entries[:5]:
 
         prompt = f"""
+Sen profesyonel bir SEO haber editörüsün.
+
 Aşağıdaki haberi yeniden yaz:
 
+Kurallar:
 - Türkçe yaz
-- Daha akıcı yap
-- Başlık üret
+- Google Discover uyumlu olsun
+- Clickbait ama gerçekçi başlık üret
+- Akıcı ve doğal yaz
+
+FORMAT:
+
+TITLE: 6-10 kelimelik güçlü başlık
+
+CONTENT:
+- 1 kısa giriş cümlesi
+- 2 paragraf özet açıklama
+- doğal ve haber dili
 
 Haber:
 {entry.title}
+"""
 
 FORMAT:
 
