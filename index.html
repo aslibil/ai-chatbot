@@ -16,6 +16,14 @@ body {
     background:#f5f5f5;
 }
 
+.news-item {
+    background:white;
+    margin-bottom:15px;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
 header {
     background:#111;
     color:white;
@@ -115,6 +123,16 @@ footer {
 <body>
 
 <header>📰 PrimeHaber | Gerçek Zamanlı Haber Akışı</header>
+
+div.innerHTML = `
+    <div>
+        <a href="#" style="font-weight:bold; color:black; text-decoration:none;">
+            ${title}
+        </a>
+        <div>${content}</div>
+    </div>
+    <span class='time'>${time()}</span>
+`;
 
 <div class="menu">
     <button onclick="getNews('son dakika haberleri')">Son Dakika</button>
@@ -226,7 +244,7 @@ async function getRealNews(){
 
 /* sayfa açılış */
 window.onload = function () {
-    getNews("son dakika haberleri");
+    getRealNews();
 };
 
 </script>
