@@ -5,152 +5,120 @@
 <meta name="google-site-verification" content="vRFuZ3zfWbqTKkobPSu5bda4XsVANqwHo7mpQefhLaU" />
 <meta name="robots" content="index, follow">
 <meta name="description" content="PrimeHaber - Son dakika haberleri, ekonomi, spor ve dünya haberleri.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PrimeHaber | Son Dakika Haberleri</title>
+<title>Son Dakika Haberleri | PrimeHaber</title>
 
 <style>
-
-body{
+body {
     margin:0;
     font-family: Arial;
-    background:#f4f4f4;
+    background:#f5f5f5;
 }
 
-/* TOP BAR */
-header{
-    background:#0f0f0f;
+header {
+    background:#111;
     color:white;
-    padding:18px;
+    padding:15px;
     font-size:22px;
-    font-weight:bold;
+    text-align:center;
 }
 
-/* NAVBAR */
-.menu{
-    background:#1c1c1c;
+.menu {
+    background:#222;
     display:flex;
     overflow-x:auto;
 }
 
-.menu button{
+.menu button {
     flex:1;
     padding:12px;
     border:none;
-    background:transparent;
+    background:#222;
     color:white;
     cursor:pointer;
-    transition:0.2s;
 }
 
-.menu button:hover{
+.menu button:hover {
     background:#c00;
 }
 
-/* MANŞET */
-.headline{
+.ad-box {
     margin:15px;
-    padding:18px;
     background:white;
-    border-radius:12px;
-    font-size:20px;
-    font-weight:bold;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* AD */
-.ad-box{
-    margin:15px;
     padding:15px;
-    background:white;
-    border-radius:10px;
     text-align:center;
+    border-radius:10px;
     color:gray;
 }
 
-/* NEWS LIST */
-.news{
+.headline {
+    background:white;
+    margin:15px;
     padding:15px;
+    border-radius:10px;
+    font-weight:bold;
+    font-size:18px;
 }
 
-.news-item{
+.news {
+    margin:15px;
+}
+
+.news-item {
     background:white;
-    padding:15px;
-    margin-bottom:12px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom:10px;
+    padding:10px;
+    border-radius:8px;
     display:flex;
     justify-content:space-between;
-    gap:10px;
+    font-size:14px;
 }
 
-.news-item b{
-    font-size:16px;
-}
-
-.news-item small{
-    color:#444;
-}
-
-/* TIME */
-.time{
-    font-size:12px;
+.time {
     color:gray;
-    white-space:nowrap;
 }
 
-/* INPUT */
-.input-box{
+.input-box {
     position:fixed;
     bottom:0;
     width:100%;
     display:flex;
-    background:white;
-    box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 }
 
-input{
+input {
     flex:1;
-    padding:14px;
+    padding:12px;
     border:none;
-    outline:none;
 }
 
-button.send{
-    padding:14px 20px;
+button.send {
+    padding:12px;
     border:none;
     background:#c00;
     color:white;
-    font-weight:bold;
 }
-
-h1{
-    margin:15px;
-    font-size:18px;
-    color:#333;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<header>📰 PrimeHaber</header>
-
-<h1>Son Dakika Haberleri</h1>
+<header>📰 PrimeHaber | Gerçek Zamanlı Haber Akışı</header>
 
 <div class="menu">
-    <button onclick="location.href='ekonomi.html'">Ekonomi</button>
-    <button onclick="location.href='spor.html'">Spor</button>
-    <button onclick="location.href='teknoloji.html'">Teknoloji</button>
-    <button onclick="location.href='dunya.html'">Dünya</button>
+    <button onclick="getNews('son dakika haberleri')">Son Dakika</button>
+    <button onclick="getNews('güncel haberler')">Güncel</button>
+    <button onclick="getNews('dünya haberleri')">Dünya</button>
+    <button onclick="getNews('ekonomi haberleri')">Ekonomi</button>
+    <button onclick="getNews('spor haberleri')">Spor</button>
+</div>
+
+<div class="ad-box">
+    Reklam Alanı (AdSense burada görünecek)
 </div>
 
 <div class="headline" id="headline">Yükleniyor...</div>
-
-<div class="ad-box">
-    Reklam Alanı (AdSense)
-</div>
 
 <div class="news" id="news"></div>
 
@@ -161,7 +129,7 @@ h1{
 
 <script>
 
-const API_URL = "https://senin-api-adresin/news";
+const API_URL = "https://ai-chatbot-api-bj93.onrender.com/news";
 
 /* saat */
 function time(){
@@ -169,11 +137,11 @@ function time(){
     return d.getHours()+":"+String(d.getMinutes()).padStart(2,'0');
 }
 
-/* HABER EKLE */
+/* haber ekle */
 function addNews(text){
 
-    const parts = text.split("HABER:");
-    const title = parts[0].replace("BAŞLIK:","").trim();
+    const parts = text.split("CONTENT:");
+    const title = parts[0].replace("TITLE:", "").trim();
     const content = parts[1] || "";
 
     const div = document.createElement("div");
@@ -184,13 +152,13 @@ function addNews(text){
             <b>${title}</b><br>
             <small>${content}</small>
         </div>
-        <span class="time">${time()}</span>
+        <span class='time'>${time()}</span>
     `;
 
     document.getElementById("news").prepend(div);
 }
 
-/* MANŞET */
+/* manşet */
 function setHeadline(text){
     document.getElementById("headline").innerText = text;
 }
@@ -206,12 +174,11 @@ async function getNews(query){
 
     const data = await res.json();
 
-    setHeadline(data.cevap);
-    addNews(data.cevap);
+    setHeadline(data.haber);
+    addNews(data.haber);
 }
 
 async function send(){
-
     const input = document.getElementById("input");
     const text = input.value;
     if(!text) return;
@@ -226,47 +193,13 @@ async function send(){
 
     const data = await res.json();
 
-    setHeadline(data.cevap);
-    addNews(data.cevap);
+    setHeadline(data.haber);
+    addNews(data.haber);
 }
 
-/* OTOMATİK HABER */
-async function loadAutoNews(){
-
-    const cats = [
-        "son dakika ekonomi",
-        "spor haberleri",
-        "teknoloji gelişmeleri",
-        "dünya haberleri"
-    ];
-
-    for(let i=0; i<3; i++){
-
-        const random = cats[Math.floor(Math.random()*cats.length)];
-
-        const res = await fetch(API_URL,{
-            method:"POST",
-            headers:{ "Content-Type":"application/json"},
-            body: JSON.stringify({message:random})
-        });
-
-        const data = await res.json();
-
-        addNews(data.cevap);
-    }
-}
-
-/* başlangıç */
+/* sayfa açılış */
 window.onload = function () {
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get("q");
-
-    if(q){
-        getNews(q);
-    } else {
-        loadAutoNews();
-        getNews("son dakika haberleri");
-    }
+    getNews("son dakika haberleri");
 };
 
 </script>
