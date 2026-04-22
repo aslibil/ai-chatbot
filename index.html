@@ -67,16 +67,18 @@ header {
 
 .news-item {
     background:white;
-    margin-bottom:10px;
-    padding:10px;
-    border-radius:8px;
+    margin-bottom:15px;
+    padding:15px;
+    border-radius:10px;
     display:flex;
-    justify-content:space-between;
-    font-size:14px;
+    flex-direction:column;
+    gap:6px;
+    font-size:15px;
 }
 
 .time {
     color:gray;
+    font-size:12px;
 }
 
 .input-box {
@@ -97,6 +99,14 @@ button.send {
     border:none;
     background:#c00;
     color:white;
+}
+
+footer {
+    background:#111;
+    color:white;
+    padding:20px;
+    text-align:center;
+    margin-top:40px;
 }
 </style>
 
@@ -127,6 +137,10 @@ button.send {
     <button class="send" onclick="send()">Gönder</button>
 </div>
 
+<footer>
+PrimeHaber © 2026
+</footer>
+
 <script>
 
 const API_URL = "https://ai-chatbot-api-bj93.onrender.com/news";
@@ -149,9 +163,9 @@ function addNews(text){
 
     div.innerHTML = `
         <div>
-            <b>${title}</b><br>
-            <small>${content}</small>
+            <b>${title}</b>
         </div>
+        <div>${content}</div>
         <span class='time'>${time()}</span>
     `;
 
