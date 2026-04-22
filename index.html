@@ -210,6 +210,19 @@ async function send(){
     setHeadline(data.haber);
     addNews(data.haber);
 }
+async function getRealNews(){
+
+    const res = await fetch("https://ai-chatbot-api-bj93.onrender.com/realnews");
+    const data = await res.json();
+
+    document.getElementById("news").innerHTML = "";
+
+    data.news.forEach(n => {
+        addNews(n);
+    });
+
+    setHeadline("Güncel Haberler");
+}
 
 /* sayfa açılış */
 window.onload = function () {
